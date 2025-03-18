@@ -23,8 +23,6 @@ public class PurifySpell extends BasicSpell {
     
     private static final float RADIUS = 10.0f;
     private static final int UNDEAD_DAMAGE = 10;
-    
-    // List of negative effect IDs to remove
     private static final int[] NEGATIVE_EFFECTS = {
             Effect.POISON,
             Effect.WEAKNESS,
@@ -43,23 +41,16 @@ public class PurifySpell extends BasicSpell {
             Element.LIGHT,
             75, // Mana cost
             75, // Required mastery level
-            20000, // Cooldown time in milliseconds (20 seconds)
+            20000, // Cooldown time
             Sound.RANDOM_EXPLODE // Cast sound
         );
     }
 
     @Override
     protected SpellCastResult executeSpell(Player player, MagicPlayer magicPlayer) {
-        // Create a purifying wave effect
         createPurifyWave(player);
-        
-        // Remove negative effects from the caster and nearby players
         int purifiedPlayers = removeNegativeEffects(player);
-        
-        // Damage undead entities
         int damagedEntities = damageUndeadEntities(player);
-        
-        // Notify the player about the results
         StringBuilder resultMessage = new StringBuilder(TextFormat.YELLOW + "You cast Purify! ");
         
         if (purifiedPlayers > 0) {
@@ -77,21 +68,16 @@ public class PurifySpell extends BasicSpell {
     
     private int removeNegativeEffects(Player caster) {
         int purifiedPlayers = 0;
-        
-        // Remove effects from the caster
         boolean casterPurified = purifyPlayer(caster);
         if (casterPurified) {
             purifiedPlayers++;
         }
-        
-        // Find and purify nearby players
+
         for (Player player : caster.getLevel().getPlayers().values()) {
-            // Skip the caster
             if (player.getId() == caster.getId()) {
                 continue;
             }
-            
-            // Check if player is within range
+
             if (player.distance(caster) <= RADIUS) {
                 boolean playerPurified = purifyPlayer(player);
                 
@@ -109,8 +95,6 @@ public class PurifySpell extends BasicSpell {
     private boolean purifyPlayer(Player player) {
         Collection<Effect> activeEffects = player.getEffects().values();
         List<Effect> effectsToRemove = new ArrayList<>();
-        
-        // Find negative effects
         for (Effect effect : activeEffects) {
             for (int negativeEffectId : NEGATIVE_EFFECTS) {
                 if (effect.getId() == negativeEffectId) {
@@ -119,13 +103,11 @@ public class PurifySpell extends BasicSpell {
                 }
             }
         }
-        
-        // Remove the negative effects
+
         for (Effect effect : effectsToRemove) {
             player.removeEffect(effect.getId());
         }
-        
-        // Return true if any effects were removed
+
         if (!effectsToRemove.isEmpty()) {
             createPurifyEffect(player);
             return true;
@@ -138,25 +120,18 @@ public class PurifySpell extends BasicSpell {
         int damagedEntities = 0;
         
         for (Entity entity : caster.getLevel().getEntities()) {
-            // Skip players and non-mobs
             if (entity instanceof Player || !(entity instanceof EntityMob)) {
                 continue;
             }
             
-            // Check if entity is within range
             if (entity.distance(caster) <= RADIUS) {
-                // Check if entity is undead
                 if (isUndead(entity)) {
-                    // Damage the entity
                     entity.attack(new EntityDamageEvent(
                             entity, 
                             DamageCause.MAGIC, 
                             UNDEAD_DAMAGE
                     ));
-                    
-                    // Add light visual effect
                     createUndeadDamageEffect(entity);
-                    
                     damagedEntities++;
                 }
             }
@@ -167,8 +142,6 @@ public class PurifySpell extends BasicSpell {
     
     private boolean isUndead(Entity entity) {
         String entityType = entity.getClass().getSimpleName().toLowerCase();
-        
-        // Check common undead mob types
         return entityType.contains("zombie") || 
                entityType.contains("skeleton") || 
                entityType.contains("wither") || 
@@ -179,20 +152,15 @@ public class PurifySpell extends BasicSpell {
     }
     
     private void createPurifyWave(Player player) {
-        // Create expanding circle
         Vector3 center = player.add(0, 0.5, 0);
-        
         for (int ring = 0; ring < 5; ring++) {
             double radius = ring * 2;
             int particles = (int) (16 * (1 + ring * 0.5));
-            
             for (int i = 0; i < particles; i++) {
                 double angle = 2 * Math.PI * i / particles;
-                
                 double x = center.x + Math.cos(angle) * radius;
                 double y = center.y;
                 double z = center.z + Math.sin(angle) * radius;
-                
                 Vector3 particlePos = new Vector3(x, y, z);
                 player.getLevel().addParticle(new GenericParticle(
                     particlePos,
@@ -204,8 +172,6 @@ public class PurifySpell extends BasicSpell {
     
     private void createPurifyEffect(Player player) {
         Vector3 position = player.add(0, 1.0, 0);
-        
-        // Create spiraling effect around player
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 12; j++) {
                 double angle = j * (Math.PI / 6) + (i * Math.PI / 18);
@@ -227,8 +193,6 @@ public class PurifySpell extends BasicSpell {
     
     private void createUndeadDamageEffect(Entity entity) {
         Vector3 position = entity.add(0, entity.getHeight() / 2, 0);
-        
-        // Create a flash of light effect
         for (int i = 0; i < 15; i++) {
             double xOffset = (Math.random() - 0.5) * 1.5;
             double yOffset = (Math.random() - 0.5) * 1.5;

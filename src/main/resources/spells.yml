@@ -1,0 +1,266 @@
+# Elemental Magic System Spells Configuration
+
+# Fire Element Spells
+fire:
+  fireball:
+    name: "Fireball"
+    description: "Launches a fireball that explodes on impact"
+    mana_cost: 25
+    cooldown: 3000
+    required_mastery: 25
+    damage: 5
+    explosion_power: 2
+    
+  ignite:
+    name: "Ignite"
+    description: "Sets target block or entity on fire"
+    mana_cost: 10
+    cooldown: 1000
+    required_mastery: 1
+    fire_ticks: 100
+    
+  flamethrower:
+    name: "Flamethrower"
+    description: "Creates a stream of fire in front of you"
+    mana_cost: 50
+    cooldown: 6000
+    required_mastery: 50
+    range: 8
+    damage: 1
+    fire_ticks: 100
+    
+  meteor_storm:
+    name: "Meteor Storm"
+    description: "Summons a storm of meteors from the sky"
+    mana_cost: 100
+    cooldown: 30000
+    required_mastery: 75
+    meteor_count: 10
+    damage: 8
+    explosion_power: 3
+
+# Water Element Spells
+water:
+  water_breathing:
+    name: "Water Breathing"
+    description: "Allows you to breathe underwater"
+    mana_cost: 15
+    cooldown: 60000
+    required_mastery: 1
+    duration: 300
+    
+  water_bolt:
+    name: "Water Bolt"
+    description: "Shoots a bolt of water that pushes entities"
+    mana_cost: 20
+    cooldown: 3000
+    required_mastery: 25
+    damage: 3
+    knockback: 3
+    
+  tsunami:
+    name: "Tsunami"
+    description: "Creates a wave of water that pushes entities away"
+    mana_cost: 50
+    cooldown: 10000
+    required_mastery: 50
+    range: 10
+    damage: 2
+    knockback: 5
+    
+  maelstrom:
+    name: "Maelstrom"
+    description: "Creates a swirling vortex of water that pulls entities in"
+    mana_cost: 100
+    cooldown: 30000
+    required_mastery: 75
+    radius: 10
+    damage: 1
+    pull_strength: 0.3
+
+# Earth Element Spells
+earth:
+  stone_shield:
+    name: "Stone Shield"
+    description: "Creates a shield of stone around you"
+    mana_cost: 30
+    cooldown: 30000
+    required_mastery: 1
+    duration: 300
+    damage_reduction: 0.5
+    
+  rock_throw:
+    name: "Rock Throw"
+    description: "Throws a rock that deals damage"
+    mana_cost: 25
+    cooldown: 3000
+    required_mastery: 25
+    damage: 7
+    
+  earthquake:
+    name: "Earthquake"
+    description: "Creates an earthquake that damages and knocks down entities"
+    mana_cost: 50
+    cooldown: 15000
+    required_mastery: 50
+    radius: 8
+    damage: 5
+    
+  terraform:
+    name: "Terraform"
+    description: "Reshapes the terrain around you"
+    mana_cost: 100
+    cooldown: 60000
+    required_mastery: 75
+    radius: 15
+
+# Air Element Spells
+air:
+  feather_fall:
+    name: "Feather Fall"
+    description: "Reduces fall damage"
+    mana_cost: 15
+    cooldown: 30000
+    required_mastery: 1
+    duration: 300
+    
+  gust:
+    name: "Gust"
+    description: "Creates a gust of wind that pushes entities"
+    mana_cost: 20
+    cooldown: 3000
+    required_mastery: 25
+    range: 10
+    knockback: 4
+    
+  cyclone:
+    name: "Cyclone"
+    description: "Creates a cyclone that lifts entities into the air"
+    mana_cost: 50
+    cooldown: 10000
+    required_mastery: 50
+    radius: 8
+    lift_height: 10
+    
+  tornado:
+    name: "Tornado"
+    description: "Creates a tornado that damages and throws entities"
+    mana_cost: 100
+    cooldown: 30000
+    required_mastery: 75
+    radius: 10
+    damage: 3
+    throw_height: 15
+
+# Light Element Spells
+light:
+  illuminate:
+    name: "Illuminate"
+    description: "Creates light in the area"
+    mana_cost: 10
+    cooldown: 1000
+    required_mastery: 1
+    radius: 10
+    
+  flash:
+    name: "Flash"
+    description: "Creates a bright flash that blinds entities"
+    mana_cost: 25
+    cooldown: 5000
+    required_mastery: 25
+    radius: 8
+    duration: 100
+    
+  heal:
+    name: "Heal"
+    description: "Heals yourself or another player"
+    mana_cost: 40
+    cooldown: 10000
+    required_mastery: 50
+    heal_amount: 10
+    
+  purify:
+    name: "Purify"
+    description: "Removes negative effects and damages undead entities"
+    mana_cost: 75
+    cooldown: 20000
+    required_mastery: 75
+    radius: 10
+    undead_damage: 10
+
+# Dark Element Spells
+dark:
+  night_vision:
+    name: "Night Vision"
+    description: "Allows seeing in the dark"
+    mana_cost: 15
+    cooldown: 60000
+    required_mastery: 1
+    duration: 600
+    
+  shadow_bolt:
+    name: "Shadow Bolt"
+    description: "Launches a bolt of shadow energy"
+    mana_cost: 25
+    cooldown: 3000
+    required_mastery: 25
+    damage: 6
+    
+  life_drain:
+    name: "Life Drain"
+    description: "Drains health from the target"
+    mana_cost: 50
+    cooldown: 10000
+    required_mastery: 50
+    damage: 8
+    heal_amount: 4
+    
+  corruption:
+    name: "Corruption"
+    description: "Corrupts the area, damaging entities over time"
+    mana_cost: 100
+    cooldown: 30000
+    required_mastery: 75
+    radius: 10
+    damage: 2
+    duration: 200
+
+# Advanced Element Spells (just a few examples)
+lightning:
+  shock:
+    name: "Shock"
+    description: "Shocks the target, dealing damage"
+    mana_cost: 30
+    cooldown: 3000
+    required_mastery: 1
+    damage: 8
+    
+  thunder_strike:
+    name: "Thunder Strike"
+    description: "Summons a bolt of lightning"
+    mana_cost: 75
+    cooldown: 15000
+    required_mastery: 50
+    damage: 15
+    explosion_power: 1
+
+ice:
+  freeze:
+    name: "Freeze"
+    description: "Freezes water or slows entities"
+    mana_cost: 20
+    cooldown: 3000
+    required_mastery: 1
+    slowness_duration: 100
+    slowness_level: 2
+    
+  blizzard:
+    name: "Blizzard"
+    description: "Creates a damaging ice storm in an area"
+    mana_cost: 75
+    cooldown: 15000
+    required_mastery: 50
+    radius: 10
+    damage: 4
+    slowness_duration: 200
+    slowness_level: 3 

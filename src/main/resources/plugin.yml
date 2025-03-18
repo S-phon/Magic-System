@@ -1,0 +1,15 @@
+name: ElementalMagicSystem
+main: com.EMagic.ElementalMagicSystem
+version: 1.0.0
+api: ["1.0.14"]
+author: Sypthon Team
+description: A complex magic system with elemental powers, combinations, and progression
+commands:
+  magic:
+    description: Base command for the elemental magic system
+    usage: /magic [element|learn|cast|combine|list]
+    permission: elementalmagic.command.magic
+permissions:
+  elementalmagic.command.magic:
+    description: Allows players to use the magic command
+    default: true 

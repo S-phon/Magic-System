@@ -1,0 +1,82 @@
+# Elemental Magic System Configuration
+
+# General Settings
+general:
+  # Whether to show spell particles
+  show_particles: true
+  # Whether to play spell sounds
+  play_sounds: true
+  # Whether to allow PvP with spells
+  allow_pvp: true
+  # Whether to allow friendly fire with spells
+  allow_friendly_fire: false
+  # Whether to enable block modifications by spells
+  enable_block_modifications: true
+
+# Mana Settings
+mana:
+  # Default starting mana
+  default_max: 100
+  # Mana regeneration rate (per tick)
+  regen_rate: 5
+  # Interval in ticks between mana regeneration (20 ticks = 1 second)
+  regen_interval: 20
+  # Whether to display mana bar
+  display_bar: true
+  # Maximum mana a player can have
+  absolute_max: 1000
+
+# Mastery Settings
+mastery:
+  # Base XP gained per spell cast
+  base_cast_xp: 1
+  # Additional XP for successful spell hits
+  hit_bonus_xp: 2
+  # Mastery level required to combine elements
+  combination_level: 50
+  # Maximum mastery level
+  max_level: 100
+  # Whether mastery increases with failed casts
+  gain_on_failure: false
+
+# Element Settings
+elements:
+  # Whether players start with a random element
+  random_starter: false
+  # Default starter element (if random_starter is false)
+  default_starter: "fire"
+  # Maximum number of basic elements a player can learn
+  max_basic_elements: 6
+  # Whether to enable elemental affinity (natural talent for specific elements)
+  enable_affinity: true
+
+# Spell Settings
+spells:
+  # Whether to require a wand (stick) for casting
+  require_wand: true
+  # Custom wand item type (default: stick)
+  wand_type: "stick"
+  # Whether to show cooldown messages
+  show_cooldown_messages: true
+  # Whether to enable spell combination (using multiple elements at once)
+  enable_spell_combination: true
+  # Global cooldown between any spell casts (in milliseconds)
+  global_cooldown: 500
+
+# Permissions
+permissions:
+  # Whether to use permission-based element restrictions
+  use_permissions: false
+  # Permission format (e.g. elementalmagic.element.fire)
+  permission_format: "elementalmagic.element.%element%"
+
+# Advanced Features
+advanced:
+  # Whether to enable player-discovered spell combinations
+  player_discoveries: false
+  # Whether elements can be lost through certain actions
+  element_loss: false
+  # Whether to enable quest-based element unlocking
+  quest_elements: false
+  # Whether to enable rare random element discoveries
+  random_discoveries: true 

@@ -22,26 +22,17 @@ public class FeatherFallSpell extends BasicSpell {
             Element.AIR,
             15, // Mana cost
             1,  // Required mastery level
-            30000, // Cooldown time in milliseconds
+            30000, // Cooldown time 
             Sound.RANDOM_LEVELUP // Cast sound
         );
     }
 
     @Override
     protected SpellCastResult executeSpell(Player player, MagicPlayer magicPlayer) {
-        // Calculate effect end time
         long endTime = System.currentTimeMillis() + (DURATION * 1000);
-        
-        // Apply the effect to the player
         magicPlayer.setEffectEndTime(EFFECT_NAME, endTime);
-        
-        // Add the effect data for the damage reduction
-        magicPlayer.setEffectData(EFFECT_NAME + ".reduction", 0.8f); // Reduce fall damage by 80%
-        
-        // Create visual effect around the player
+        magicPlayer.setEffectData(EFFECT_NAME + ".reduction", 0.8f); 
         createFeatherEffect(player);
-        
-        // Notify the player
         player.sendMessage(TextFormat.AQUA + "You feel light as a feather! Fall damage reduced for " + DURATION + " seconds.");
         
         return SpellCastResult.SUCCESS;
@@ -49,11 +40,10 @@ public class FeatherFallSpell extends BasicSpell {
     
     private void createFeatherEffect(Player player) {
         Vector3 position = player.add(0, 0.5, 0);
-        
-        // Create swirling particles around the player
-        for (int i = 0; i < 2; i++) { // Create 2 particle rings
+
+        for (int i = 0; i < 2; i++) { 
             double height = i * 0.5;
-            for (int j = 0; j < 16; j++) { // 16 particles per ring
+            for (int j = 0; j < 16; j++) { 
                 double angle = j * (Math.PI / 8);
                 double radius = 0.8;
                 

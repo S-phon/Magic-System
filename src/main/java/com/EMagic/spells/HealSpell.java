@@ -12,8 +12,8 @@ import com.EMagic.player.MagicPlayer;
 
 public class HealSpell extends BasicSpell {
     
-    private static final int HEAL_AMOUNT = 10; // How many half-hearts to heal
-    private static final float HEAL_RADIUS = 5.0f; // Radius to heal nearby players
+    private static final int HEAL_AMOUNT = 10;
+    private static final float HEAL_RADIUS = 5.0f;
     
     public HealSpell() {
         super(
@@ -22,39 +22,29 @@ public class HealSpell extends BasicSpell {
             Element.LIGHT,
             40, // Mana cost
             50, // Required mastery level
-            10000, // Cooldown time in milliseconds (10 seconds)
+            10000, // Cooldown time
             Sound.RANDOM_ORB // Cast sound
         );
     }
 
     @Override
     protected SpellCastResult executeSpell(Player player, MagicPlayer magicPlayer) {
-        // Heal the caster
         healPlayer(player);
-        
-        // Create visual effect for caster
         createHealEffect(player);
-        
-        // Heal nearby players (potential allies)
         int healedAllies = 0;
         for (Player nearbyPlayer : player.getLevel().getPlayers().values()) {
-            // Skip the caster
             if (nearbyPlayer.getId() == player.getId()) {
                 continue;
             }
-            
-            // Check if player is within range
+
             if (nearbyPlayer.distance(player) <= HEAL_RADIUS) {
                 healPlayer(nearbyPlayer);
                 createHealEffect(nearbyPlayer);
                 healedAllies++;
-                
-                // Notify the player they were healed
                 nearbyPlayer.sendMessage(TextFormat.GREEN + player.getName() + " has healed you!");
             }
         }
-        
-        // Give feedback to the caster
+
         if (healedAllies > 0) {
             player.sendMessage(TextFormat.GREEN + "You've healed yourself and " + healedAllies + " nearby allies!");
         } else {
@@ -65,21 +55,14 @@ public class HealSpell extends BasicSpell {
     }
     
     private void healPlayer(Player player) {
-        // Get current health
         float currentHealth = player.getHealth();
         float maxHealth = player.getMaxHealth();
-        
-        // Calculate new health
         float newHealth = Math.min(currentHealth + HEAL_AMOUNT, maxHealth);
-        
-        // Set the new health
         player.setHealth(newHealth);
     }
     
     private void createHealEffect(Player player) {
         Vector3 position = player.add(0, 1.0, 0);
-        
-        // Create expanding ring effects
         for (int ring = 0; ring < 3; ring++) {
             double ringRadius = 0.5 + (ring * 0.3);
             

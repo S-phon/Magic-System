@@ -9,6 +9,7 @@ import cn.nukkit.utils.TextFormat;
 
 import com.EMagic.commands.MagicCommand;
 import com.EMagic.elements.ElementManager;
+import com.EMagic.listeners.FallDamageListener;
 import com.EMagic.player.MagicPlayer;
 import com.EMagic.player.MagicPlayerManager;
 import com.EMagic.events.MagicEventListener;
@@ -53,6 +54,8 @@ public class ElementalMagicSystem extends PluginBase {
         spellManager = new SpellManager(this);
         
         getServer().getPluginManager().registerEvents(new MagicEventListener(this), this);
+        getServer().getPluginManager().registerEvents(new com.EMagic.events.DamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new FallDamageListener(this), this);
         magicCommand = new MagicCommand(this);
         this.getLogger().info(TextFormat.GREEN + "ElementalMagic System enabled!");
     }

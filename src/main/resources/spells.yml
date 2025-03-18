@@ -47,7 +47,7 @@ water:
     mana_cost: 15
     cooldown: 60000
     required_mastery: 1
-    duration: 300
+    duration: 60
     
   water_bolt:
     name: "Water Bolt"
@@ -86,7 +86,7 @@ earth:
     mana_cost: 30
     cooldown: 30000
     required_mastery: 1
-    duration: 300
+    duration: 60
     damage_reduction: 0.5
     
   rock_throw:

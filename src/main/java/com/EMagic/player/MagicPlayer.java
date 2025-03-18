@@ -26,7 +26,9 @@ public class MagicPlayer {
     private int manaRegenRate;
     private String activeElement;
     private Map<String, Long> spellCooldowns;
-    private int elementalAffinity; 
+    private int elementalAffinity;
+    private Map<String, Long> spellEffectEndTimes;
+    private Map<String, Object> spellEffectData;
     
     public MagicPlayer(ElementalMagicSystem plugin, Player player) {
         this.plugin = plugin;
@@ -39,7 +41,8 @@ public class MagicPlayer {
         this.manaRegenRate = 5;
         this.activeElement = null;
         this.spellCooldowns = new HashMap<>();
-        
+        this.spellEffectEndTimes = new HashMap<>();
+        this.spellEffectData = new HashMap<>();
 
         this.elementalAffinity = (int) (Math.random() * 6);
     }
@@ -55,6 +58,8 @@ public class MagicPlayer {
         this.manaRegenRate = 5;
         this.activeElement = null;
         this.spellCooldowns = new HashMap<>();
+        this.spellEffectEndTimes = new HashMap<>();
+        this.spellEffectData = new HashMap<>();
         
         this.elementalAffinity = (int) (Math.random() * 6);
     }
@@ -196,6 +201,81 @@ public class MagicPlayer {
         return new HashMap<>(elementMasteryLevels);
     }
     
+    /**
+     * Sets the end time for a spell effect
+     * @param effectName The name of the effect
+     * @param endTime The time when the effect should end (in milliseconds)
+     */
+    public void setEffectEndTime(String effectName, long endTime) {
+        spellEffectEndTimes.put(effectName, endTime);
+    }
+    
+    /**
+     * Checks if a spell effect is active
+     * @param effectName The name of the effect
+     * @return True if the effect is active, false otherwise
+     */
+    public boolean hasActiveEffect(String effectName) {
+        if (!spellEffectEndTimes.containsKey(effectName)) {
+            return false;
+        }
+        
+        long currentTime = System.currentTimeMillis();
+        long endTime = spellEffectEndTimes.get(effectName);
+        
+        return currentTime < endTime;
+    }
+    
+    /**
+     * Gets the remaining time of a spell effect
+     * @param effectName The name of the effect
+     * @return The remaining time in milliseconds, or 0 if the effect is not active
+     */
+    public long getEffectRemainingTime(String effectName) {
+        if (!spellEffectEndTimes.containsKey(effectName)) {
+            return 0;
+        }
+        
+        long currentTime = System.currentTimeMillis();
+        long endTime = spellEffectEndTimes.get(effectName);
+        
+        return Math.max(0, endTime - currentTime);
+    }
+    
+    /**
+     * Removes a spell effect
+     * @param effectName The name of the effect to remove
+     */
+    public void removeEffect(String effectName) {
+        spellEffectEndTimes.remove(effectName);
+    }
+    
+    /**
+     * Stores additional data for a spell effect
+     * @param key The data key
+     * @param value The data value
+     */
+    public void setEffectData(String key, Object value) {
+        spellEffectData.put(key, value);
+    }
+    
+    /**
+     * Gets additional data for a spell effect
+     * @param key The data key
+     * @return The data value, or null if not found
+     */
+    public Object getEffectData(String key) {
+        return spellEffectData.get(key);
+    }
+    
+    /**
+     * Removes additional data for a spell effect
+     * @param key The data key
+     */
+    public void removeEffectData(String key) {
+        spellEffectData.remove(key);
+    }
+    
     public void saveData() {
         Config config = plugin.getPlayerDataConfig();
         String uuid = playerUUID.toString();
@@ -211,6 +291,14 @@ public class MagicPlayer {
         
         for (Map.Entry<String, Integer> entry : elementMasteryLevels.entrySet()) {
             config.set(uuid + ".mastery." + entry.getKey(), entry.getValue());
+        }
+        
+        // Save active spell effects
+        for (Map.Entry<String, Long> entry : spellEffectEndTimes.entrySet()) {
+            if (entry.getValue() > System.currentTimeMillis()) {
+                // Only save effects that haven't expired yet
+                config.set(uuid + ".effects." + entry.getKey(), entry.getValue());
+            }
         }
         
         config.save();
@@ -250,5 +338,21 @@ public class MagicPlayer {
             int level = config.getInt(uuid + ".mastery." + element, 0);
             elementMasteryLevels.put(element, level);
         }
+        
+        // Load spell effects
+        long currentTime = System.currentTimeMillis();
+        if (config.getSection(uuid + ".effects") != null) {
+            for (String effectName : config.getSection(uuid + ".effects").getKeys(false)) {
+                long endTime = config.getLong(uuid + ".effects." + effectName);
+                if (endTime > currentTime) {
+                    // Only load effects that haven't expired yet
+                    spellEffectEndTimes.put(effectName, endTime);
+                }
+            }
+        }
+    }
+    
+    public ElementalMagicSystem getPlugin() {
+        return plugin;
     }
 } 

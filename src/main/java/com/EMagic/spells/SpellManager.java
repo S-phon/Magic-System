@@ -27,32 +27,38 @@ public class SpellManager {
     private void registerSpells() {
         List<Spell> fireSpells = new ArrayList<>();
         fireSpells.add(new FireballSpell());
+        fireSpells.add(new IgniteSpell());
 
         elementSpells.put(Element.FIRE, fireSpells);
         
         // Water spells
         List<Spell> waterSpells = new ArrayList<>();
-        // Add water spells here
+        waterSpells.add(new WaterBoltSpell());
+        waterSpells.add(new WaterBreathingSpell());
         elementSpells.put(Element.WATER, waterSpells);
         
         // Earth spells
         List<Spell> earthSpells = new ArrayList<>();
-        // Add earth spells here
+        earthSpells.add(new StoneShieldSpell());
+        earthSpells.add(new RockThrowSpell());
         elementSpells.put(Element.EARTH, earthSpells);
         
         // Air spells
         List<Spell> airSpells = new ArrayList<>();
-        // Add air spells here
+        airSpells.add(new FeatherFallSpell());
+        airSpells.add(new GustSpell());
         elementSpells.put(Element.AIR, airSpells);
         
         // Light spells
         List<Spell> lightSpells = new ArrayList<>();
-        // Add light spells here
+        lightSpells.add(new HealSpell());
+        lightSpells.add(new PurifySpell());
         elementSpells.put(Element.LIGHT, lightSpells);
         
         // Dark spells
         List<Spell> darkSpells = new ArrayList<>();
-        // Add dark spells here
+        darkSpells.add(new ShadowBoltSpell());
+        darkSpells.add(new LifeDrainSpell());
         elementSpells.put(Element.DARK, darkSpells);
         
         // Advanced element spells soon

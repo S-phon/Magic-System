@@ -66,3 +66,8 @@ Mastery points can be gained from various activities:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details. 
+
+## TODO
+
+Adding Bound so we can bound one spell on one stick only
+Adding New spells

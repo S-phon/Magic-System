@@ -55,7 +55,7 @@ Mastery points can be gained from various activities:
 
 ## Installation
 
-1. Place the ElementsMagicSystem.jar file in your server's plugins folder
+1. Place the jar file in your server's plugins folder
 2. Restart your server
 3. Configure the plugin in the config.yml file
 

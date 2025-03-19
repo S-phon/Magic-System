@@ -51,6 +51,7 @@ public class SpellManager {
         
         // Light spells
         List<Spell> lightSpells = new ArrayList<>();
+        lightSpells.add(new IlluminateSpell());
         lightSpells.add(new HealSpell());
         lightSpells.add(new PurifySpell());
         elementSpells.put(Element.LIGHT, lightSpells);

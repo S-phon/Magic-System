@@ -152,7 +152,7 @@ public class MagicPlayer {
         if (hasUnlockedElement(elementName)) {
             int currentMastery = getElementMasteryLevel(elementName);
             int bonus = getAffinityBonus(elementName);
-            elementMasteryLevels.put(elementName, Math.min(100, currentMastery + amount + bonus));
+            elementMasteryLevels.put(elementName, Math.min(1000, currentMastery + amount + bonus));
         }
     }
     

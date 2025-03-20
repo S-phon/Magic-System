@@ -213,11 +213,11 @@ public class MagicCommand extends PluginCommand<ElementalMagicSystem> {
         int element1Mastery = magicPlayer.getElementMasteryLevel(element1);
         int element2Mastery = magicPlayer.getElementMasteryLevel(element2);
         
-        if (element1Mastery < 50 || element2Mastery < 50) {
-            player.sendMessage(TextFormat.RED + "You need at least 50 mastery in both elements to combine them!");
-            player.sendMessage(TextFormat.YELLOW + "Your mastery: " + firstElement.getDisplayName() + 
-                               TextFormat.YELLOW + ": " + element1Mastery + "/50, " + 
-                               secondElement.getDisplayName() + TextFormat.YELLOW + ": " + element2Mastery + "/50");
+        if (element1Mastery < 750 || element2Mastery < 750) {
+            player.sendMessage(TextFormat.RED + "You need at least 750 mastery in both elements to combine them!");
+            player.sendMessage(TextFormat.YELLOW + "Your mastery: " + firstElement.getDisplayName() +
+                    TextFormat.YELLOW + ": " + element1Mastery + "/750, " +
+                    secondElement.getDisplayName() + TextFormat.YELLOW + ": " + element2Mastery + "/750");
             return;
         }
 

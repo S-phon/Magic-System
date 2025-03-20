@@ -73,11 +73,11 @@ public class Element {
     }
     
     public void setMasteryLevel(int masteryLevel) {
-        this.masteryLevel = Math.min(100, Math.max(0, masteryLevel));
+        this.masteryLevel = Math.min(1000, Math.max(0, masteryLevel));
     }
     
     public void increaseMastery(int amount) {
-        this.masteryLevel = Math.min(100, masteryLevel + amount);
+        this.masteryLevel = Math.min(1000, masteryLevel + amount);
     }
     
     public int getTier() {

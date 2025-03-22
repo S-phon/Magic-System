@@ -33,7 +33,7 @@ public class MeteorSpell extends BasicSpell {
             Element.FIRE,
             150, // Mana cost
             75, // Required mastery level
-            15000, // Cooldown time
+            15000, // Cooldown time ( 15sec )
             Sound.MOB_GHAST_FIREBALL // Cast sound
         );
     }

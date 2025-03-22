@@ -29,6 +29,7 @@ public class SpellManager {
         fireSpells.add(new FireballSpell());
         fireSpells.add(new IgniteSpell());
         fireSpells.add(new MeteorSpell());
+        fireSpells.add(new FlamethrowerSpell());
 
         elementSpells.put(Element.FIRE, fireSpells);
         

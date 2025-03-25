@@ -35,7 +35,7 @@ mastery:
   # Mastery level required to combine elements
   combination_level: 50
   # Maximum mastery level
-  max_level: 100
+  max_level: 1000
   # Whether mastery increases with failed casts
   gain_on_failure: false
 
@@ -46,7 +46,7 @@ elements:
   # Default starter element (if random_starter is false)
   default_starter: "fire"
   # Maximum number of basic elements a player can learn
-  max_basic_elements: 6
+  max_basic_elements: 3
   # Whether to enable elemental affinity (natural talent for specific elements)
   enable_affinity: true
 

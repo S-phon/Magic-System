@@ -23,22 +23,17 @@ public class FallDamageListener implements Listener {
     
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDamage(EntityDamageEvent event) {
-        // Check if it's a fall damage event
         if (event.getCause() != DamageCause.FALL) {
             return;
         }
-        
-        // Check if the entity is a player
+
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
         
         Player player = (Player) event.getEntity();
         MagicPlayer magicPlayer = plugin.getPlayerManager().getMagicPlayer(player);
-        
-        // Check if player has the Feather Fall effect
         if (magicPlayer.hasActiveEffect("feather_fall")) {
-            // Get the damage reduction amount
             Object reductionObj = magicPlayer.getEffectData("feather_fall.reduction");
             if (reductionObj != null && reductionObj instanceof Float) {
                 float reduction = (Float) reductionObj;

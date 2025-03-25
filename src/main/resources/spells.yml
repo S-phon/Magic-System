@@ -31,13 +31,17 @@ fire:
     
   meteor_storm:
     name: "Meteor Storm"
-    description: "Summons a storm of meteors from the sky"
-    mana_cost: 100
-    cooldown: 30000
-    required_mastery: 75
-    meteor_count: 10
-    damage: 8
-    explosion_power: 3
+    description: "Summons a devastating storm of meteors that obliterates everything in a massive area"
+    mana_cost: 500
+    cooldown: 120000
+    required_mastery: 95
+    meteor_count: 100
+    damage: 50
+    explosion_power: 10
+    area_radius: 250
+    destroy_terrain: true
+    fire_spread: true
+    bypass_protection: true
 
 # Water Element Spells
 water:

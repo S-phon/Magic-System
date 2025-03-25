@@ -49,7 +49,6 @@ public class DamageListener implements Listener {
                     int preventedDisplay = (int) Math.ceil(prevented);
                     
                     // Show stone particles on hit to indicate shield activation
-                    // Create stone dust particles (brown color)
                     for (int i = 0; i < 10; i++) {
                         double offsetX = Math.random() * 1 - 0.5;
                         double offsetY = Math.random() * 1;

@@ -59,7 +59,7 @@ public class IgniteSpell extends BasicSpell {
             return SpellCastResult.FAILED;
         }
 
-        player.level.setBlock(targetPos, Block.get(51)); // 51 is fire block ID
+        player.level.setBlock(targetPos, Block.get(51)); // 51 fire block ID
         int masteryLevel = magicPlayer.getElementMasteryLevel(Element.FIRE);
         if (masteryLevel >= 50) {
             for (int i = 0; i < 4; i++) {
@@ -76,8 +76,7 @@ public class IgniteSpell extends BasicSpell {
             }
             player.sendMessage(TextFormat.GOLD + "Your mastery creates additional flames!");
         }
-        
-        // Success message
+
         player.sendMessage(TextFormat.RED + "You cast " + TextFormat.GOLD + "Ignite" + TextFormat.RED + "!");
         return SpellCastResult.SUCCESS;
     }

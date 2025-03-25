@@ -71,9 +71,10 @@ public class FlamethrowerSpell extends BasicSpell {
         }
         
         startFlamethrower(player, magicPlayer, range, duration);
+        
         return SpellCastResult.SUCCESS;
     }
-    
+
     private void startFlamethrower(Player player, MagicPlayer magicPlayer, int range, int duration) {
         TaskHandler task = plugin.getServer().getScheduler().scheduleRepeatingTask(() -> {
             if (!player.isOnline() || player.isClosed()) {
@@ -95,12 +96,12 @@ public class FlamethrowerSpell extends BasicSpell {
                 player.z,
                 player.level
             );
-          
+
             createFlameParticles(player, direction, range);
             damageEntitiesInPath(player, playerEyePos, direction, range);
             player.getLevel().addSound(player, Sound.MOB_BLAZE_BREATHE);
             
-        }, 20); 
+        }, 20);
 
         activeFlamethrowers.put(player.getName(), task);
         plugin.getServer().getScheduler().scheduleDelayedTask(() -> {
@@ -142,7 +143,7 @@ public class FlamethrowerSpell extends BasicSpell {
                 } else {
                     level.addParticle(new LavaParticle(new Vector3(x, y, z)));
                 }
-              
+
                 if (random.nextDouble() < 0.03) {
                     Vector3 blockPos = new Vector3(x, y, z);
                     Block block = level.getBlock(blockPos);
@@ -159,7 +160,7 @@ public class FlamethrowerSpell extends BasicSpell {
 
     private void damageEntitiesInPath(Player caster, Position startPos, Vector3 direction, int range) {
         Level level = caster.getLevel();
-        double width = 2.0; 
+        double width = 2.0;
         
         for (Entity entity : level.getEntities()) {
             if (entity.equals(caster)) continue;
@@ -174,7 +175,7 @@ public class FlamethrowerSpell extends BasicSpell {
             double distanceFromLine = entityDelta.subtract(projected).length();
             double maxDistAtThisRange = width * (dot / range);
             if (distanceFromLine > maxDistAtThisRange) continue;
-            entity.setOnFire(3); 
+            entity.setOnFire(3); // 3sec
             entity.attack(new EntityDamageEvent(
                 entity,
                 DamageCause.FIRE,

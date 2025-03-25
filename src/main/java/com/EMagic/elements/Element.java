@@ -37,6 +37,7 @@ public class Element {
     private int particleType;
     private int masteryLevel; // 1-100
     private int tier; // 1-Basic, 2-Advanced, 3-Divine
+    private String description = "";
     
     public Element(String name, String displayName, TextFormat color, int particleType, int tier, String... parentElements) {
         this.name = name;
@@ -122,5 +123,21 @@ public class Element {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+    
+    /**
+     * Gets the description of this element
+     * @return The element description
+     */
+    public String getDescription() {
+        return description;
+    }
+    
+    /**
+     * Sets the description of this element
+     * @param description The element description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 } 

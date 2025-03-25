@@ -29,6 +29,10 @@ public class MagicPlayer {
     private int elementalAffinity;
     private Map<String, Long> spellEffectEndTimes;
     private Map<String, Object> spellEffectData;
+    private int manaLevel = 1;
+    private int manaCrystals = 0;
+    private String boundSpellElement = null;
+    private String boundSpellName = null;
     
     public MagicPlayer(ElementalMagicSystem plugin, Player player) {
         this.plugin = plugin;
@@ -276,6 +280,40 @@ public class MagicPlayer {
         spellEffectData.remove(key);
     }
     
+    /**
+     * Gets the element of the bound spell
+     * @return The element name, or null if no spell is bound
+     */
+    public String getBoundSpellElement() {
+        return boundSpellElement;
+    }
+    
+    /**
+     * Gets the name of the bound spell
+     * @return The spell name, or null if no spell is bound
+     */
+    public String getBoundSpellName() {
+        return boundSpellName;
+    }
+    
+    /**
+     * Checks if a spell is bound to the player's stick
+     * @return True if a spell is bound, false otherwise
+     */
+    public boolean hasSpellBound() {
+        return boundSpellElement != null && boundSpellName != null;
+    }
+    
+    /**
+     * Binds a spell to the player's stick
+     * @param elementName The element of the spell
+     * @param spellName The name of the spell
+     */
+    public void setBoundSpell(String elementName, String spellName) {
+        this.boundSpellElement = elementName;
+        this.boundSpellName = spellName;
+    }
+    
     public void saveData() {
         Config config = plugin.getPlayerDataConfig();
         String uuid = playerUUID.toString();
@@ -292,14 +330,15 @@ public class MagicPlayer {
         for (Map.Entry<String, Integer> entry : elementMasteryLevels.entrySet()) {
             config.set(uuid + ".mastery." + entry.getKey(), entry.getValue());
         }
-        
-        // Save active spell effects
+
         for (Map.Entry<String, Long> entry : spellEffectEndTimes.entrySet()) {
             if (entry.getValue() > System.currentTimeMillis()) {
-                // Only save effects that haven't expired yet
                 config.set(uuid + ".effects." + entry.getKey(), entry.getValue());
             }
         }
+        
+        config.set(uuid + ".boundSpellElement", boundSpellElement);
+        config.set(uuid + ".boundSpellName", boundSpellName);
         
         config.save();
     }
@@ -338,21 +377,84 @@ public class MagicPlayer {
             int level = config.getInt(uuid + ".mastery." + element, 0);
             elementMasteryLevels.put(element, level);
         }
-        
-        // Load spell effects
+
         long currentTime = System.currentTimeMillis();
         if (config.getSection(uuid + ".effects") != null) {
             for (String effectName : config.getSection(uuid + ".effects").getKeys(false)) {
                 long endTime = config.getLong(uuid + ".effects." + effectName);
                 if (endTime > currentTime) {
-                    // Only load effects that haven't expired yet
                     spellEffectEndTimes.put(effectName, endTime);
                 }
             }
+        }
+        
+        // Load bound spell (added in v1.2)
+        if (config.exists(uuid + ".boundSpellElement")) {
+            boundSpellElement = config.getString(uuid + ".boundSpellElement");
+        }
+        
+        if (config.exists(uuid + ".boundSpellName")) {
+            boundSpellName = config.getString(uuid + ".boundSpellName");
         }
     }
     
     public ElementalMagicSystem getPlugin() {
         return plugin;
+    }
+    
+    /**
+     * Gets the player's current mana level
+     * @return The mana level
+     */
+    public int getManaLevel() {
+        return manaLevel;
+    }
+    
+    /**
+     * Sets the player's mana level
+     * @param level The new mana level
+     */
+    public void setManaLevel(int level) {
+        this.manaLevel = Math.max(1, level);
+        this.maxMana = 100 + (manaLevel - 1) * 25;
+    }
+    
+    /**
+     * Gets the player's current mana crystals
+     * @return The number of mana crystals
+     */
+    public int getManaCrystals() {
+        return manaCrystals;
+    }
+    
+    /**
+     * Adds mana crystals to the player
+     * @param amount The amount to add
+     */
+    public void addManaCrystals(int amount) {
+        this.manaCrystals += amount;
+        checkManaLevelUp();
+    }
+    
+    /**
+     * Gets the number of mana crystals required for the next level
+     * @return The required crystals
+     */
+    public int getRequiredManaCrystals() {
+        return manaLevel * 10;
+    }
+    
+    /**
+     * Checks if the player has enough mana crystals to level up
+     * and performs the level up if possible
+     */
+    private void checkManaLevelUp() {
+        int required = getRequiredManaCrystals();
+        if (manaCrystals >= required) {
+            manaCrystals -= required;
+            manaLevel++;
+            maxMana = 100 + (manaLevel - 1) * 25;
+            manaRegenRate = 5 + (manaLevel - 1) / 2;
+        }
     }
 } 

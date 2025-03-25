@@ -28,9 +28,8 @@ public class SpellManager {
         List<Spell> fireSpells = new ArrayList<>();
         fireSpells.add(new FireballSpell());
         fireSpells.add(new IgniteSpell());
-        fireSpells.add(new MeteorSpell());
         fireSpells.add(new FlamethrowerSpell());
-
+        fireSpells.add(new MeteorSpell());
         elementSpells.put(Element.FIRE, fireSpells);
         
         // Water spells
@@ -65,7 +64,7 @@ public class SpellManager {
         darkSpells.add(new LifeDrainSpell());
         elementSpells.put(Element.DARK, darkSpells);
         
-        // Advanced element spells soon
+        // Advanced element spells coming soon
     }
     
     /**
@@ -75,6 +74,18 @@ public class SpellManager {
      */
     public List<Spell> getSpellsForElement(String elementName) {
         return elementSpells.getOrDefault(elementName, new ArrayList<>());
+    }
+    
+    /**
+     * Gets all spells from all elements
+     * @return List of all spells
+     */
+    public List<Spell> getAllSpells() {
+        List<Spell> allSpells = new ArrayList<>();
+        for (List<Spell> elementSpellList : elementSpells.values()) {
+            allSpells.addAll(elementSpellList);
+        }
+        return allSpells;
     }
     
     /**

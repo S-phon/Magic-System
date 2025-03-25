@@ -64,15 +64,15 @@ public class MagicEventListener implements Listener {
     private static final int[] LIGHT_ENTITIES = {15, 20}; // Villager, Iron Golem
     private static final int[] DARK_ENTITIES = {34, 48, 52, 38}; // Skeleton, Wither Skeleton, Wither, Enderman
     
-    // Timer for environment mastery gain (in ticks, 20 ticks = 1 second)
+    // Timer for environment mastery gain
     private static final int ENVIRONMENT_MASTERY_TIMER = 200; // 10 seconds
     private Map<String, Long> lastEnvironmentMasteryTime = new HashMap<>();
     
     // Timer for tree mana regeneration (5 seconds)
-    private static final int TREE_MANA_REGEN_TIMER = 100; // 5 seconds in ticks
+    private static final int TREE_MANA_REGEN_TIMER = 100; // 5 seconds
     private Map<String, Long> lastTreeManaRegenTime = new HashMap<>();
     
-    // Tree block IDs (logs and leaves)
+    // Tree block IDs
     private static final int[] TREE_BLOCKS = {17, 162, 18, 161}; // Log, Log2, Leaves, Leaves2
     
     public MagicEventListener(ElementalMagicSystem plugin) {
@@ -127,13 +127,42 @@ public class MagicEventListener implements Listener {
                 }
                 
                 SpellManager spellManager = plugin.getSpellManager();
-                SpellCastResult result = spellManager.castBasicSpell(player, activeElement);
+                SpellCastResult result;
                 
-                if (result == SpellCastResult.SUCCESS) {
-                    magicPlayer.increaseElementMastery(activeElement, 1);
+                // Check if a spell is bound to the stick
+                if (magicPlayer.hasSpellBound()) {
+                    String boundSpellElement = magicPlayer.getBoundSpellElement();
+                    String boundSpellName = magicPlayer.getBoundSpellName();
                     
-                    if (magicPlayer.getElementMasteryLevel(activeElement) >= 50) {
-                        checkElementCombinations(player, magicPlayer);
+                    // Make sure the player still has the element unlocked
+                    if (magicPlayer.hasUnlockedElement(boundSpellElement)) {
+                        result = spellManager.castSpell(player, boundSpellElement, boundSpellName);
+                        
+                        if (result == SpellCastResult.SUCCESS) {
+                            magicPlayer.increaseElementMastery(boundSpellElement, 1);
+                            
+                            if (magicPlayer.getElementMasteryLevel(boundSpellElement) >= 50) {
+                                checkElementCombinations(player, magicPlayer);
+                            }
+                        }
+                    } else {
+                        // Player no longer has the element unlocked
+                        player.sendMessage(TextFormat.RED + "You've lost access to the bound spell's element!");
+                        magicPlayer.setBoundSpell(null, null);
+                        
+                        // Fall back to the basic spell
+                        result = spellManager.castBasicSpell(player, activeElement);
+                    }
+                } else {
+                    // No spell bound, cast the basic spell
+                    result = spellManager.castBasicSpell(player, activeElement);
+                    
+                    if (result == SpellCastResult.SUCCESS) {
+                        magicPlayer.increaseElementMastery(activeElement, 1);
+                        
+                        if (magicPlayer.getElementMasteryLevel(activeElement) >= 50) {
+                            checkElementCombinations(player, magicPlayer);
+                        }
                     }
                 }
             }
@@ -247,7 +276,7 @@ public class MagicEventListener implements Listener {
         
         for (String elementName : magicPlayer.getUnlockedElements()) {
             int masteryGain = getMasteryGainForBlock(elementName, blockId);
-            if (masteryGain > 0 && random.nextInt(100) < 30) { // 30% chance
+            if (masteryGain > 0 && random.nextInt(100) < 30) { 
                 magicPlayer.increaseElementMastery(elementName, masteryGain);
                 player.sendMessage(TextFormat.DARK_PURPLE + "+" + masteryGain + " " + 
                                   elementName + " mastery from mining!");
@@ -282,7 +311,7 @@ public class MagicEventListener implements Listener {
         String playerName = player.getName();
 
         if (!lastTreeManaRegenTime.containsKey(playerName) || 
-            currentTime - lastTreeManaRegenTime.get(playerName) >= TREE_MANA_REGEN_TIMER * 50) { // Convert ticks to ms
+            currentTime - lastTreeManaRegenTime.get(playerName) >= TREE_MANA_REGEN_TIMER * 50) { 
             lastTreeManaRegenTime.put(playerName, currentTime);
 
             if (isNearTree(player)) {
@@ -310,7 +339,7 @@ public class MagicEventListener implements Listener {
                     masteryGain = Math.max(masteryGain, 1);
                 } else if (elementName.equals(Element.WATER) && (blockStandingIn.getId() == 8 || blockStandingIn.getId() == 9)) { // Block.WATER = 8, Block.FLOWING_WATER = 9
                     masteryGain = Math.max(masteryGain, 1);
-                } else if (elementName.equals(Element.AIR) && player.getY() > 100) { // High elevation
+                } else if (elementName.equals(Element.AIR) && player.getY() > 100) { 
                     masteryGain = Math.max(masteryGain, 1);
                 } else if (elementName.equals(Element.LIGHT) && player.getLevel().getTime() < 12000) { // Daytime
                     masteryGain = Math.max(masteryGain, 1);
@@ -318,7 +347,7 @@ public class MagicEventListener implements Listener {
                     masteryGain = Math.max(masteryGain, 1);
                 }
                 
-                if (masteryGain > 0 && random.nextInt(100) < 50) { // 50% chance
+                if (masteryGain > 0 && random.nextInt(100) < 50) { 
                     magicPlayer.increaseElementMastery(elementName, masteryGain);
                     player.sendMessage(TextFormat.DARK_PURPLE + "+" + masteryGain + " " + 
                                       elementName + " mastery from your surroundings!");

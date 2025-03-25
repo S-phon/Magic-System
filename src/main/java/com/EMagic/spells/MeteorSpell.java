@@ -33,7 +33,7 @@ public class MeteorSpell extends BasicSpell {
             Element.FIRE,
             150, // Mana cost
             75, // Required mastery level
-            15000, // Cooldown time ( 15sec )
+            15000, // Cooldown time (15sec)
             Sound.MOB_GHAST_FIREBALL // Cast sound
         );
     }
@@ -54,7 +54,7 @@ public class MeteorSpell extends BasicSpell {
         createElementalParticleTrail(player, direction);
 
         int masteryLevel = magicPlayer.getElementMasteryLevel(Element.FIRE);
-        int explosionPower = 5;
+        int explosionPower = 5; // Base explosion power
         
         if (masteryLevel >= 150) {
             explosionPower = 15;
@@ -70,22 +70,40 @@ public class MeteorSpell extends BasicSpell {
         
         return SpellCastResult.SUCCESS;
     }
-
+    
+    /**
+     * Summons a meteor at the target location
+     * @param caster The player who cast the spell
+     * @param targetPos The position to strike with the meteor
+     * @param explosionPower Power of the explosion
+     */
     private void summonMeteor(Player caster, Vector3 targetPos, int explosionPower) {
         if (targetPos == null || caster.getLevel() == null) return;
+        
         Level level = caster.getLevel();
+        
+        // Calculate meteor starting position
         Vector3 meteorStartPos = new Vector3(
-            targetPos.getX() + (random.nextDouble() * 10) - 5,
-            targetPos.getY() + METEOR_HEIGHT,
-            targetPos.getZ() + (random.nextDouble() * 10) - 5
+            targetPos.getX() + (random.nextDouble() * 10) - 5,  // Random X offset
+            targetPos.getY() + METEOR_HEIGHT,                    // Height above target
+            targetPos.getZ() + (random.nextDouble() * 10) - 5   // Random Z offset
         );
-
+        
+        // Schedule meteor animation and impact
         animateMeteorDescent(caster, meteorStartPos, targetPos, explosionPower);
     }
-
+    
+    /**
+     * Animates the meteor falling from the sky to the target
+     * @param caster The player who cast the spell
+     * @param startPos The starting position of the meteor
+     * @param targetPos The target position for impact
+     * @param explosionPower The power of the explosion
+     */
     private void animateMeteorDescent(Player caster, Vector3 startPos, Vector3 targetPos, int explosionPower) {
         Level level = caster.getLevel();
         Vector3 direction = targetPos.subtract(startPos).normalize();
+
         ElementalMagicSystem plugin = ElementalMagicSystem.getInstance();
         Vector3 meteorPos = startPos.clone();
         
@@ -99,7 +117,7 @@ public class MeteorSpell extends BasicSpell {
                     particlePos.z += (random.nextDouble() * 2) - 1;
                     
                     level.addParticle(new LavaParticle(particlePos));
-
+                    
                     Vector3 trailPos = particlePos.clone();
                     trailPos.y -= 2 + random.nextDouble() * 3;
                     level.addParticle(new SmokeParticle(trailPos));
@@ -119,12 +137,17 @@ public class MeteorSpell extends BasicSpell {
         }, 5, 2);
     }
     
+    /**
+     * Creates the meteor impact explosion and effects
+     * @param caster The player who cast the spell
+     * @param position The impact position
+     * @param explosionPower The power of the explosion
+     */
     private void createMeteorImpact(Player caster, Vector3 position, int explosionPower) {
         Level level = caster.getLevel();
-
         level.addParticle(new HugeExplodeSeedParticle(position));
         level.addSound(position, Sound.RANDOM_EXPLODE);
- 
+        
         Position explosionPos = new Position(position.x, position.y, position.z, level);
         Explosion explosion = new Explosion(explosionPos, explosionPower, null);
         explosion.explodeA();
@@ -132,6 +155,7 @@ public class MeteorSpell extends BasicSpell {
 
         int fireRadius = explosionPower + 2;
         placeFireInRadius(position, level, fireRadius, 100);
+
         for (int i = 0; i < 40; i++) {
             Vector3 particlePos = position.clone();
             particlePos.x += (random.nextDouble() * fireRadius * 2) - fireRadius;
@@ -146,6 +170,14 @@ public class MeteorSpell extends BasicSpell {
         }
     }
     
+    /**
+     * Places fire blocks in a radius around the given location
+     * @param center The center location
+     * @param level The level to place blocks in
+     * @param radius The radius to place fire blocks
+     * @param maxFireCount Maximum number of fire blocks to create
+     * @return Number of fire blocks placed
+     */
     private int placeFireInRadius(Vector3 center, Level level, int radius, int maxFireCount) {
         if (level == null) return 0;
         
@@ -162,7 +194,7 @@ public class MeteorSpell extends BasicSpell {
                         Block blockAbove = level.getBlock(abovePos);
 
                         if (block.isSolid() && blockAbove.getId() == 0) {
-                            level.setBlock(abovePos, Block.get(51)); 
+                            level.setBlock(abovePos, Block.get(51)); // Fire block
                             count++;
                             break;
                         }

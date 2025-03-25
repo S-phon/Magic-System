@@ -14,6 +14,8 @@ import com.EMagic.player.MagicPlayer;
 import com.EMagic.player.MagicPlayerManager;
 import com.EMagic.events.MagicEventListener;
 import com.EMagic.spells.SpellManager;
+import com.EMagic.forms.MagicForms;
+import com.EMagic.forms.FormListener;
 
 import java.util.HashMap;
 import java.io.File;
@@ -27,6 +29,7 @@ public class ElementalMagicSystem extends PluginBase {
     private Config spellConfig;
     private Config playerDataConfig;
     private MagicCommand magicCommand;
+    private MagicForms formManager;
     
     @Override
     public void onLoad() {
@@ -52,11 +55,15 @@ public class ElementalMagicSystem extends PluginBase {
         elementManager = new ElementManager(this);
         playerManager = new MagicPlayerManager(this);
         spellManager = new SpellManager(this);
+        formManager = new MagicForms(this);
         
         getServer().getPluginManager().registerEvents(new MagicEventListener(this), this);
         getServer().getPluginManager().registerEvents(new com.EMagic.events.DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new FallDamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new FormListener(this), this);
+        
         magicCommand = new MagicCommand(this);
+        
         this.getLogger().info(TextFormat.GREEN + "ElementalMagic System enabled!");
     }
     
@@ -97,5 +104,9 @@ public class ElementalMagicSystem extends PluginBase {
     
     public Config getPlayerDataConfig() {
         return playerDataConfig;
+    }
+    
+    public MagicForms getFormManager() {
+        return formManager;
     }
 } 

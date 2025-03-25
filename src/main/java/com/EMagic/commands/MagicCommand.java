@@ -21,7 +21,7 @@ public class MagicCommand extends PluginCommand<ElementalMagicSystem> {
     public MagicCommand(ElementalMagicSystem plugin) {
         super("magic", plugin);
         this.setDescription("Base command for the elemental magic system");
-        this.setUsage("/magic [element|learn|cast|combine|list]");
+        this.setUsage("/magic [element|learn|cast|combine|list|bound]");
         this.setPermission("elementalmagic.command.magic");
     }
     
@@ -36,42 +36,55 @@ public class MagicCommand extends PluginCommand<ElementalMagicSystem> {
         ElementalMagicSystem plugin = getPlugin();
         MagicPlayer magicPlayer = plugin.getPlayerManager().getMagicPlayer(player);
         
+        // If no arguments, open the main menu form
         if (args.length == 0) {
-            sendHelp(sender);
+            plugin.getFormManager().showMainMenu(player);
             return true;
         }
         
+        // Open the appropriate form based on the subcommand
         switch (args[0].toLowerCase()) {
             case "element":
-                handleElementCommand(player, magicPlayer, args);
+                plugin.getFormManager().showElementSelect(player, magicPlayer);
                 break;
                 
             case "learn":
-                handleLearnCommand(player, magicPlayer, args);
+                plugin.getFormManager().showLearnElement(player, magicPlayer);
                 break;
                 
             case "cast":
-                handleCastCommand(player, magicPlayer, args);
+                plugin.getFormManager().showSpellCast(player, magicPlayer);
                 break;
                 
             case "combine":
-                handleCombineCommand(player, magicPlayer, args);
+                plugin.getFormManager().showElementCombine(player, magicPlayer);
                 break;
                 
             case "list":
-                handleListCommand(player, magicPlayer, args);
+                if (args.length > 1 && args[1].equalsIgnoreCase("spells")) {
+                    plugin.getFormManager().showSpellsList(player, magicPlayer);
+                } else {
+                    plugin.getFormManager().showElementsList(player);
+                }
                 break;
                 
             case "info":
-                handleInfoCommand(player, magicPlayer);
+                plugin.getFormManager().showPlayerInfo(player, magicPlayer);
+                break;
+                
+            case "bound":
+                plugin.getFormManager().showSpellBindingForm(player, magicPlayer);
                 break;
                 
             case "help":
+                // Keep the help command as text output
                 sendHelp(sender);
                 break;
                 
             default:
-                sender.sendMessage(TextFormat.RED + "Unknown subcommand. Type /magic help for help.");
+                // For unknown commands, show the main menu and a message
+                player.sendMessage(TextFormat.RED + "Unknown magic command. Opening main menu...");
+                plugin.getFormManager().showMainMenu(player);
                 break;
         }
         
@@ -86,6 +99,7 @@ public class MagicCommand extends PluginCommand<ElementalMagicSystem> {
         sender.sendMessage(TextFormat.GREEN + "/magic combine <element1> <element2>" + TextFormat.WHITE + " - Try to combine elements");
         sender.sendMessage(TextFormat.GREEN + "/magic list [elements|spells]" + TextFormat.WHITE + " - List elements or spells");
         sender.sendMessage(TextFormat.GREEN + "/magic info" + TextFormat.WHITE + " - Show your magic information");
+        sender.sendMessage(TextFormat.GREEN + "/magic bound" + TextFormat.WHITE + " - Bind a spell to your stick");
     }
     
     private void handleElementCommand(Player player, MagicPlayer magicPlayer, String[] args) {
@@ -331,5 +345,17 @@ public class MagicCommand extends PluginCommand<ElementalMagicSystem> {
             int mastery = magicPlayer.getElementMasteryLevel(elementName);
             player.sendMessage("  " + element.getDisplayName() + TextFormat.WHITE + ": " + mastery + "/100");
         }
+    }
+
+    /**
+     * Handle the bound command which opens a form to bind a spell to a stick
+     */
+    private void handleBoundCommand(Player player, MagicPlayer magicPlayer) {
+        if (magicPlayer.getUnlockedElements().isEmpty()) {
+            player.sendMessage(TextFormat.RED + "You haven't unlocked any elements yet!");
+            return;
+        }
+        
+        getPlugin().getFormManager().showSpellBindingForm(player, magicPlayer);
     }
 } 

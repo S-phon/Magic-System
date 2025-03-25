@@ -71,3 +71,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Adding Bound so we can bound one spell on one stick only
 Adding New spells
+
+## Notice
+this project is mostly AI generated but it got checked and before i update any code i would check entire code on myself again so if you saw any bug please pull request of issue thanks

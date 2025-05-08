@@ -73,5 +73,4 @@ Adding Bound so we can bound one spell on one stick only
 Adding New spells
 
 ## Notice
-this project is mostly AI generated but it got checked and before i update any code i would check entire code on myself again so if you saw any bug please pull request of issue thanks
-at the end of month i will rewrite this project on myself so it's not gonna be ai gen forever
+this project is **mostly AI generated** so if you saw any bug please pull request or issue.
